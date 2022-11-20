@@ -27,82 +27,120 @@ void Entity__move(struct Entity * entity, int x, int y) {
   entity->y = y;
 }
 
-/* struct Link * Link__new(struct Entity * entity) { */
-/*   struct Link * link = malloc(sizeof(struct Link)); */
-/*   link->element = entity; */
-/*   link->next = NULL; */
-/*   return link; */
-/* } */
+struct Link * Link__new(struct Entity * entity) {
+  struct Link * link = malloc(sizeof(struct Link));
+  link->element = entity;
+  link->next = NULL;
+  return link;
+}
 
-/* struct Link * EntityList__new() { */
-/*   struct Link * list = malloc(sizeof(struct Link)); */
-/*   return list; */
-/* } */
+struct Link * EntityList__new() {
+  struct Link * list = malloc(sizeof(struct Link));
+  return list;
+}
 
-/* void EntityList__destroy(struct Link * list) { */
-/*  // make sure to free memory for each element */
-/*  // for each link */
-/*  // and finally for the base link itself */
-/* } */
+void EntityList__destroy(struct Link * list) {
+  struct Link * link = list;
+  while (link != NULL && link->element != NULL) {
+    free(link->element);
+    struct Link * next = link->next;
+    free(link);
+    link = next;
+  }
+  free(link);
+}
 
-/* void EntityList__push(struct Link * list, struct Entity * entity) { */
-/*   struct Link * link = list; */
-/*   while (link->next != NULL) link = link->next; */
-/*   if (link->element != NULL) { */
-/*     struct Link * newLink = Link__new(entity); */
-/*     link->next = newLink; */
-/*   } else link->element = entity; */
-/* } */
+void EntityList__draw(struct Link * list) {
+  bool at_end_of_list = false;
 
-/* int EntityList__size(struct Link * list) { */
-/*   bool at_end_of_list = false; */
+  struct Link * node = list;
 
-/*   struct Link * node = list; */
-/*   int size = 0; */
+  while (node->element != NULL && at_end_of_list != true) {
+    Entity__draw(node->element);
+    if (node->next != NULL) node = node->next;
+    else at_end_of_list = true;
+  }
+}
 
-/*   while (node->element != NULL && at_end_of_list != true) { */
-/*     size++; */
+void EntityList__push(struct Link * list, struct Entity * entity) {
+  struct Link * link = list;
+  while (link->next != NULL) link = link->next;
+  if (link->element != NULL) {
+    struct Link * newLink = Link__new(entity);
+    link->next = newLink;
+  } else link->element = entity;
+}
 
-/*     if (node->next != NULL) node = node->next; */
-/*     else at_end_of_list = true; */
-/*   } */
-/*   return size; */
-/* } */
+int EntityList__size(struct Link * list) {
+  bool at_end_of_list = false;
 
-/* void EntityList__delete_link(struct Link * list, struct Link * link_to_remove) { */
-/*   bool at_end_of_list = false; */
+  struct Link * node = list;
+  int size = 0;
 
-/*   struct Link * node = list; */
+  while (node->element != NULL && at_end_of_list != true) {
+    size++;
 
-/*   // what if it's the first node in the list? */
-/*   while (node->element != NULL && at_end_of_list != true) { */
-/*     struct Link * next = node->next; */
-/*     if (next != NULL) { */
-/*       if (next == link_to_remove) { */
-/*         node->next = link_to_remove->next; */
-/*         if (node->element != NULL) free(node->element); */
-/*         free(link_to_remove); */
-/*         return; */
-/*       } else node = node->next; */
-/*     } */
-/*     else at_end_of_list = true; */
-/*   } */
-/* } */
+    if (node->next != NULL) node = node->next;
+    else at_end_of_list = true;
+  }
+  return size;
+}
 
-/* void EntityList__delete_element( */
-/*   struct Link * list, struct Entity * entity */
-/* ) { */
-/*   bool at_end_of_list = false; */
+// TODO: refactor this mess
+void EntityList__delete_link(struct Link * list, struct Link * link_to_remove) {
+  // if it's the first node in the list
+  if (list == link_to_remove) {
+    if (list->next == NULL) list->element = NULL;
+    else {
+      // free memory from first link's element
+      free(list->element);
+      struct Link * next = list->next;
+      // make first link look like second link
+      list->element = next->element;
+      list->next = next->next;
+      // free memory from second link
+      free(next);
+    }
+    return;
+  }
 
-/*   struct Link * node = list; */
+  bool at_end_of_list = false;
 
-/*   while (node->element != NULL && at_end_of_list != true) { */
-/*     struct Link * next = node->next; */
-/*     if (next != NULL) { */
-/*       if (next->element == entity) { */
-/*         EntityList__delete_link(list, next); */
-/*       } else node = node->next; */
-/*     } */
-/*     else at_end_of_list = true; */
-/*   } */
-/* } */
+  struct Link * node = list;
+
+  while (node->element != NULL && at_end_of_list != true) {
+    struct Link * next = node->next;
+    if (next != NULL) {
+      if (next == link_to_remove) {
+        node->next = link_to_remove->next;
+        if (node->element != NULL) free(node->element);
+        free(link_to_remove);
+        return;
+      } else node = node->next;
+    }
+    else at_end_of_list = true;
+  }
+}
+
+void EntityList__delete_element(
+  struct Link * list, struct Entity * entity
+) {
+  bool at_end_of_list = false;
+
+  struct Link * node = list;
+
+  while (node->element != NULL && at_end_of_list != true) {
+
+    if (node->element == entity) {
+      EntityList__delete_link(list, node);
+    }
+
+    struct Link * next = node->next;
+    if (next != NULL) {
+      if (next->element == entity) {
+        EntityList__delete_link(list, next);
+      } else node = node->next;
+    }
+    else at_end_of_list = true;
+  }
+}
