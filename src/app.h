@@ -1,8 +1,6 @@
 #ifndef APP_H
 #define APP_H
 
-/* #include "game.h" */
-
 struct App {
   struct Game * game;
 };

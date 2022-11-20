@@ -1,12 +1,18 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include "app.h"
-#include "game.c"
-/* #include "colors.c" */
+#include "game.h"
+#include "colors.c"
+
+void _configure_colors() {
+  start_color();
+  init_pair(MAGENTA, COLOR_MAGENTA, COLOR_BLACK);
+  init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
+}
 
 void _configure_curses() {
   initscr();
-  configure_colors();
+  _configure_colors();
   keypad(stdscr, true);
   noecho();
   curs_set(0);

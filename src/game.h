@@ -1,6 +1,5 @@
 #ifndef GAME_H
 #define GAME_H
-/* #include "entity.h" */
 
 struct Game {
   struct Entity * player;

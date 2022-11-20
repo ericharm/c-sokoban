@@ -3,13 +3,10 @@ add_library(
   app.h
   entity.h
   game.h
-  player.h
   app.c
-  boulder.c
   colors.c
   entity.c
   game.c
-  player.c
 )
 
 target_include_directories(

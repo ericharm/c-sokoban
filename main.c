@@ -1,6 +1,5 @@
 #include <ncurses.h>
-#include "src/app.c"
-
+#include "src/app.h"
 
 int main() {
   struct App * app = App__new();

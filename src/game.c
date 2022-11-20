@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include "game.h"
-#include "entity.c"
-#include "player.c"
-#include "boulder.c"
+#include "entity.h"
+#include "entities/player.h"
+#include "entities/boulder.c"
 
 struct Game * Game__new() {
   struct Game * game = malloc(sizeof(struct Game));

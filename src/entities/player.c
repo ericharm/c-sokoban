@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include "player.h"
-#include "entity.h"
-#include "colors.c"
+#include "../entity.h"
+#include "../colors.c"
 
 struct Entity * Player__new(int x, int y) {
   return Entity__new('@', MAGENTA, x, y);

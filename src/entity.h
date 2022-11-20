@@ -21,6 +21,7 @@ struct Link {
 
 struct Link * Link__new(struct Entity * element);
 struct Link * EntityList__new();
+void EntityList__draw(struct Link * list);
 void EntityList__destroy(struct Link * list);
 void EntityList__push(struct Link * list, struct Entity * entity);
 int EntityList__size(struct Link * list);
