@@ -61,7 +61,7 @@ void test_EntityList__delete_link_first_of_two() {
 }
 
 
-void test_EntityList__delete_element() {
+void test_delete_element_from_beginning_of_list_with_multiple_elements() {
   describe_test("test deleting element from beginning of list with multiple elements");
 
   struct Entity * hero = Entity__new('@', 0, 0, 0);
@@ -87,6 +87,32 @@ void test_EntityList__delete_element() {
 }
 
   /* describe_test("test deleting element from beginning of list with one element"); */
+
+void test_delete_element_from_end_of_list() {
+  describe_test("test deleting element from end of list");
+
+  struct Entity * hero = Entity__new('@', 0, 0, 0);
+  struct Entity * wall = Entity__new('#', 0, 0, 0);
+
+  struct Link * list = EntityList__new();
+
+  assert(EntityList__size(list) == 0);
+  assert(list->element == NULL);
+  assert(list->next == NULL);
+
+  EntityList__push(list, hero);
+  assert(EntityList__size(list) == 1);
+  assert(list->element == hero);
+
+  EntityList__push(list, wall);
+  assert(EntityList__size(list) == 2);
+  assert(list->element == hero);
+
+  EntityList__delete_element(list, wall);
+  assert(EntityList__size(list) == 1);
+  assert(list->element == hero);
+}
+
   /* describe_test("test deleting element from end of list"); */
   /* describe_test("test deleting element from middle of list"); */
 
@@ -96,5 +122,6 @@ void run_entity_tests() {
   test_EntityList__push();
   test_EntityList__delete_link();
   test_EntityList__delete_link_first_of_two();
-  test_EntityList__delete_element();
+  test_delete_element_from_beginning_of_list_with_multiple_elements();
+  test_delete_element_from_end_of_list();
 }

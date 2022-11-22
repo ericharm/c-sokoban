@@ -1,14 +1,21 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+enum EntityType {
+  BOULDER_TYPE,
+  PLAYER_TYPE,
+  WALL_TYPE
+};
+
 struct Entity {
   char ch;
   int color;
+  enum EntityType type;
   int x;
   int y;
 };
 
-struct Entity * Entity__new(char ch, int color, int x, int y);
+struct Entity * Entity__new(enum EntityType type, int x, int y);
 void Entity__destroy(struct Entity * entity);
 void Entity__draw(struct Entity * entity);
 void Entity__move(struct Entity * entity, int x, int y);
@@ -25,6 +32,7 @@ void EntityList__draw(struct Link * list);
 void EntityList__destroy(struct Link * list);
 void EntityList__push(struct Link * list, struct Entity * entity);
 int EntityList__size(struct Link * list);
+struct Entity * EntityList__element_at(struct Link * list, int x, int y);
 void EntityList__delete_link(struct Link * list, struct Link * link_to_remove);
 void EntityList__delete_element(
   struct Link * list, struct Entity * entity_to_remove

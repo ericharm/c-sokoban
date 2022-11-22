@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.22.3)
 project(sokoban)
 
 add_subdirectory(src)
-add_subdirectory(src/entities)
+# add_subdirectory(src/entities)
 # add_subdirectory(src/states)
 
 # specify the C++ standard
@@ -19,7 +19,7 @@ add_executable(${PROJECT_NAME} main.c)
 target_link_libraries(
   ${PROJECT_NAME}
   src
-  entities
+  # entities
   # states
   ${CURSES_LIBRARIES}
 )

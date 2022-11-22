@@ -1,14 +1,28 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include "entity.h"
-#include "colors.c"
+#include "colors.h"
 
-struct Entity * Entity__new(char ch, int color, int x, int y) {
+struct Entity * Entity__new(enum EntityType type, int x, int y) {
   struct Entity * entity = malloc(sizeof(struct Entity));
-  entity->ch = ch;
-  entity->color = color;
+  entity->type = type;
   entity->x = x;
   entity->y = y;
+
+  switch (type) {
+    case BOULDER_TYPE:
+      entity->ch = '0';
+      entity->color = GREEN;
+      break;
+    case PLAYER_TYPE:
+      entity->ch = '@';
+      entity->color = MAGENTA;
+      break;
+    case WALL_TYPE:
+      entity->ch = '#';
+      entity->color = WHITE;
+      break;
+  }
   return entity;
 }
 
@@ -86,6 +100,23 @@ int EntityList__size(struct Link * list) {
   return size;
 }
 
+struct Entity * EntityList__element_at(struct Link * list, int x, int y) {
+  bool at_end_of_list = false;
+
+  struct Link * node = list;
+  int size = 0;
+
+  while (node->element != NULL && at_end_of_list != true) {
+    if (node->element->x == x && node->element->y == y) {
+      return node->element;
+    }
+
+    if (node->next != NULL) node = node->next;
+    else at_end_of_list = true;
+  }
+  return NULL;
+}
+
 // TODO: refactor this mess
 void EntityList__delete_link(struct Link * list, struct Link * link_to_remove) {
   // if it's the first node in the list
@@ -133,12 +164,14 @@ void EntityList__delete_element(
 
     if (node->element == entity) {
       EntityList__delete_link(list, node);
+      return;
     }
 
     struct Link * next = node->next;
     if (next != NULL) {
       if (next->element == entity) {
         EntityList__delete_link(list, next);
+        return;
       } else node = node->next;
     }
     else at_end_of_list = true;

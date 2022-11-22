@@ -3,7 +3,6 @@
 
 struct Game {
   struct Entity * player;
-  struct Entity * boulder;
   struct Link * boulderList;
 };
 

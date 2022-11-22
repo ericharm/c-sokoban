@@ -2,12 +2,13 @@
 #include <ncurses.h>
 #include "app.h"
 #include "game.h"
-#include "colors.c"
+#include "colors.h"
 
 void _configure_colors() {
   start_color();
   init_pair(MAGENTA, COLOR_MAGENTA, COLOR_BLACK);
-  init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(GREEN, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
 }
 
 void _configure_curses() {

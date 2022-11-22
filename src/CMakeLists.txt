@@ -1,12 +1,16 @@
 add_library(
   src
   app.h
+  colors.h
   entity.h
   game.h
+  logger.h
+  point.h
   app.c
-  colors.c
   entity.c
   game.c
+  logger.c
+  point.c
 )
 
 target_include_directories(
