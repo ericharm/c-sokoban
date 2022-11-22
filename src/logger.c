@@ -8,7 +8,7 @@ void Logger__int(int n) {
   sprintf(str, "%d", n);
   f = fopen("x.log", "a+");
   if (f == NULL) { /* Something is wrong   */}
-  fprintf(f, str);
+  fprintf(f, "%s", str);
   fclose(f);
 }
 
@@ -16,6 +16,6 @@ void Logger__str(char * message) {
   FILE *f;
   f = fopen("x.log", "a+");
   if (f == NULL) { /* Something is wrong   */}
-  fprintf(f, message);
+  fprintf(f, "%s", message);
   fclose(f);
 }

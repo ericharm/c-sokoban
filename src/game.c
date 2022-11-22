@@ -2,7 +2,6 @@
 #include <ncurses.h>
 #include "game.h"
 #include "entity.h"
-#include "logger.h"
 #include "point.h"
 
 struct Game * Game__new() {
