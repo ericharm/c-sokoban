@@ -3,7 +3,7 @@
 
 struct Game {
   struct Entity * player;
-  struct Link * boulderList;
+  struct Link * entities;
 };
 
 struct Game * Game__new();

@@ -2,29 +2,58 @@
 #include <ncurses.h>
 #include "game.h"
 #include "entity.h"
+#include "logger.h"
 #include "point.h"
+
+void _read_level(struct Game * game) {
+  FILE * file = fopen("data/level_1.lvl", "r");
+
+  int x = -1;
+  int y = 0;
+
+  int ch = fgetc(file);
+
+  do {
+    switch (ch) {
+      case '\n':
+        x = -1;
+        y++;
+        break;
+      case '@':
+        game->player = Entity__new(PLAYER_TYPE, x, y);
+        break;
+      case '0':
+        EntityList__push(game->entities, Entity__new(BOULDER_TYPE, x, y));
+        break;
+      case '#':
+        EntityList__push(game->entities, Entity__new(WALL_TYPE, x, y));
+        break;
+    }
+    x++;
+    ch = fgetc(file);
+  } while (ch != EOF);
+
+  fclose(file);
+
+}
 
 struct Game * Game__new() {
   struct Game * game = malloc(sizeof(struct Game));
-  game->player = Entity__new(PLAYER_TYPE, 5, 5);
-  game->boulderList = EntityList__new();
+  game->entities = EntityList__new();
 
-  EntityList__push(game->boulderList, Entity__new(WALL_TYPE, 1, 2));
-  EntityList__push(game->boulderList, Entity__new(WALL_TYPE, 5, 2));
-  EntityList__push(game->boulderList, Entity__new(BOULDER_TYPE, 2, 2));
-  EntityList__push(game->boulderList, Entity__new(BOULDER_TYPE, 8, 2));
+  _read_level(game);
   return game;
 }
 
 void Game__destroy(struct Game * game) {
   Entity__destroy(game->player);
-  EntityList__destroy(game->boulderList);
+  EntityList__destroy(game->entities);
   free(game);
 }
 
 void Game__draw(struct Game * game) {
   Entity__draw(game->player);
-  EntityList__draw(game->boulderList);
+  EntityList__draw(game->entities);
 }
 
 struct Point * _next_location(struct Entity * entity, int x, int y) {
@@ -35,7 +64,7 @@ struct Point * _next_location(struct Entity * entity, int x, int y) {
 void _Game__move_player(struct Game * game, int x, int y) {
   struct Point * player_next = _next_location(game->player, x, y);
   struct Entity * entity = EntityList__element_at(
-    game->boulderList, player_next->x, player_next->y
+    game->entities, player_next->x, player_next->y
   );
 
   if (entity == NULL) {
@@ -69,14 +98,14 @@ void Game__handle_input(struct Game * game, int ch) {
   struct Point * player_next = _next_location(game->player, x, y);
 
   struct Entity * entity = EntityList__element_at(
-    game->boulderList, player_next->x, player_next->y
+    game->entities, player_next->x, player_next->y
   );
 
   if (entity) {
     struct Point * entity_next = _next_location(entity, x, y);
 
     if (entity->type == BOULDER_TYPE) {
-      _Game__move_entity(game->boulderList, entity, x, y);
+      _Game__move_entity(game->entities, entity, x, y);
     }
     Point__destroy(entity_next);
   }
