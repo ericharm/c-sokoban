@@ -28,6 +28,12 @@ void _read_level(struct Game * game) {
       case '#':
         EntityList__push(game->entities, Entity__new(WALL_TYPE, x, y));
         break;
+      case '^':
+        EntityList__push(game->entities, Entity__new(PIT_TYPE, x, y));
+        break;
+      case 'X':
+        EntityList__push(game->entities, Entity__new(EXIT_TYPE, x, y));
+        break;
     }
     x++;
     ch = fgetc(file);
@@ -40,7 +46,6 @@ void _read_level(struct Game * game) {
 struct Game * Game__new() {
   struct Game * game = malloc(sizeof(struct Game));
   game->entities = EntityList__new();
-
   _read_level(game);
   return game;
 }
@@ -73,15 +78,19 @@ void _Game__move_player(struct Game * game, int x, int y) {
   Point__destroy(player_next);
 }
 
-void _Game__move_entity(struct Link * boulders, struct Entity * entity, int x, int y) {
+void _Game__move_entity(struct Link * entities, struct Entity * entity, int x, int y) {
   struct Point * boulder_next = _next_location(entity, x, y);
 
-  struct Entity * other_boulder = EntityList__element_at(
-    boulders, boulder_next->x, boulder_next->y
+  struct Entity * obstacle = EntityList__element_at(
+    entities, boulder_next->x, boulder_next->y
   );
 
-  if (other_boulder == NULL) {
+  if (obstacle == NULL) {
     Entity__move(entity, boulder_next->x, boulder_next->y);
+  } else {
+    if (obstacle->type == PIT_TYPE) {
+      // remove pit and boulder
+    }
   }
 
   Point__destroy(boulder_next);

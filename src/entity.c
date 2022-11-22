@@ -12,7 +12,15 @@ struct Entity * Entity__new(enum EntityType type, int x, int y) {
   switch (type) {
     case BOULDER_TYPE:
       entity->ch = '0';
+      entity->color = CYAN;
+      break;
+    case EXIT_TYPE:
+      entity->ch = 'X';
       entity->color = GREEN;
+      break;
+    case PIT_TYPE:
+      entity->ch = '^';
+      entity->color = YELLOW;
       break;
     case PLAYER_TYPE:
       entity->ch = '@';

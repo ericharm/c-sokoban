@@ -7,8 +7,10 @@
 void _configure_colors() {
   start_color();
   init_pair(MAGENTA, COLOR_MAGENTA, COLOR_BLACK);
-  init_pair(GREEN, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
   init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
+  init_pair(CYAN, COLOR_CYAN, COLOR_BLACK);
+  init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
 }
 
 void _configure_curses() {

@@ -3,6 +3,8 @@
 
 enum EntityType {
   BOULDER_TYPE,
+  EXIT_TYPE,
+  PIT_TYPE,
   PLAYER_TYPE,
   WALL_TYPE
 };
