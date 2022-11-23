@@ -6,7 +6,7 @@ struct Point {
   int y;
 };
 
-struct Point * Point__new(int x, int y);
-void Point__destroy(struct Point * point);
+struct Point * create_point(int x, int y);
+void destroy_point(struct Point * point);
 
 #endif

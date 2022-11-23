@@ -2,16 +2,16 @@
 #include "src/app.h"
 
 int main() {
-  struct App * app = App__new();
+  struct App * app = create_app();
 
   while (1) {
     int input = getch();
     if (input == 'q') {
-      App__destroy(app);
+      destroy_app(app);
       return 0;
     }
-    App__handle_input(app, input);
-    App__draw(app);
+    handle_app_input(app, input);
+    draw_app(app);
   }
 
   return 1;

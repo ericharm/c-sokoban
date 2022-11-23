@@ -21,27 +21,27 @@ void _configure_curses() {
   curs_set(0);
 }
 
-struct App * App__new() {
+struct App * create_app() {
   _configure_curses();
   struct App * app = malloc(sizeof(struct App));
-  app->game = Game__new();
-  App__draw(app);
+  app->game = create_game();
+  draw_app(app);
   return app;
 }
 
-void App__destroy(struct App * app) {
-  Game__destroy(app->game);
+void destroy_app(struct App * app) {
+  destroy_game(app->game);
   free(app);
   clear();
   endwin();
 }
 
-void App__draw(struct App * app) {
+void draw_app(struct App * app) {
   clear();
-  Game__draw(app->game);
+  draw_game(app->game);
   refresh();
 }
 
-void App__handle_input(struct App * app, int ch) {
-  Game__handle_input(app->game, ch);
+void handle_app_input(struct App * app, int ch) {
+  handle_game_input(app->game, ch);
 }

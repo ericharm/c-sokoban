@@ -3,13 +3,6 @@
 
 
 int main() {
-
-  printf("\n");
-
   run_entity_tests();
-
-
-  printf("\n");
-
   return 0;
 }

@@ -1,4 +1,4 @@
 build/
-*.log
+log.txt
 *.swp
 .DS_Store

@@ -5,9 +5,9 @@ struct App {
   struct Game * game;
 };
 
-struct App * App__new();
-void App__destroy(struct App * app);
-void App__draw(struct App * app);
-void App__handle_input(struct App * app, int ch);
+struct App * create_app();
+void destroy_app(struct App * app);
+void draw_app(struct App * app);
+void handle_app_input(struct App * app, int ch);
 
 #endif

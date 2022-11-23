@@ -2,103 +2,80 @@
 #include <ncurses.h>
 #include "game.h"
 #include "entity.h"
-#include "logger.h"
+#include "level_reader.h"
 #include "point.h"
+#include "logger.h"
 
-void _read_level(struct Game * game) {
-  FILE * file = fopen("data/level_1.lvl", "r");
-
-  int x = -1;
-  int y = 0;
-
-  int ch = fgetc(file);
-
-  do {
-    switch (ch) {
-      case '\n':
-        x = -1;
-        y++;
-        break;
-      case '@':
-        game->player = Entity__new(PLAYER_TYPE, x, y);
-        break;
-      case '0':
-        EntityList__push(game->entities, Entity__new(BOULDER_TYPE, x, y));
-        break;
-      case '#':
-        EntityList__push(game->entities, Entity__new(WALL_TYPE, x, y));
-        break;
-      case '^':
-        EntityList__push(game->entities, Entity__new(PIT_TYPE, x, y));
-        break;
-      case 'X':
-        EntityList__push(game->entities, Entity__new(EXIT_TYPE, x, y));
-        break;
-    }
-    x++;
-    ch = fgetc(file);
-  } while (ch != EOF);
-
-  fclose(file);
-
-}
-
-struct Game * Game__new() {
+struct Game * create_game() {
   struct Game * game = malloc(sizeof(struct Game));
-  game->entities = EntityList__new();
-  _read_level(game);
+  game->entities = load_level_entities("data/level_1.lvl");
+  game->player = load_level_player("data/level_1.lvl");
   return game;
 }
 
-void Game__destroy(struct Game * game) {
-  Entity__destroy(game->player);
-  EntityList__destroy(game->entities);
+void destroy_game(struct Game * game) {
+  destroy_entity(game->player);
+  destroy_entity_list(game->entities);
   free(game);
 }
 
-void Game__draw(struct Game * game) {
-  Entity__draw(game->player);
-  EntityList__draw(game->entities);
+void draw_game(struct Game * game) {
+  draw_entity(game->player);
+  draw_entity_list(game->entities);
 }
 
 struct Point * _next_location(struct Entity * entity, int x, int y) {
-  struct Point * point = Point__new(entity->x + x, entity->y + y);
+  struct Point * point = create_point(entity->x + x, entity->y + y);
   return point;
 }
 
-void _Game__move_player(struct Game * game, int x, int y) {
+void _move_player(struct Game * game, int x, int y) {
   struct Point * player_next = _next_location(game->player, x, y);
-  struct Entity * entity = EntityList__element_at(
+  struct Entity * entity = find_entity_at_point_in_list(
     game->entities, player_next->x, player_next->y
   );
 
   if (entity == NULL) {
-    Entity__move(game->player, player_next->x, player_next->y);
+    move_entity(game->player, player_next->x, player_next->y);
   }
-  Point__destroy(player_next);
+  destroy_point(player_next);
 }
 
-void _Game__move_entity(struct Link * entities, struct Entity * entity, int x, int y) {
+void _move_entity(struct Link * entities, struct Entity * entity, int x, int y) {
   struct Point * boulder_next = _next_location(entity, x, y);
 
-  struct Entity * obstacle = EntityList__element_at(
+  struct Entity * obstacle = find_entity_at_point_in_list(
     entities, boulder_next->x, boulder_next->y
   );
 
   if (obstacle == NULL) {
-    Entity__move(entity, boulder_next->x, boulder_next->y);
+    move_entity(entity, boulder_next->x, boulder_next->y);
   } else {
     if (obstacle->type == PIT_TYPE) {
       // remove pit and boulder
-      EntityList__delete_element(entities, obstacle);
-      EntityList__delete_element(entities, entity);
+      //
+      log_str("amount of entities before removing: ");
+      log_int(entity_list_length(entities));
+      log_str("\n");
+
+      remove_entity_from_list(entities, obstacle);
+
+      log_str("amount of entities after removing pit: ");
+      log_int(entity_list_length(entities));
+      log_str("\n");
+
+      remove_entity_from_list(entities, entity);
+
+      /* log_str("amount of entities after removing boulder: "); */
+      /* log_int(entity_list_length(entities)); */
+      /* log_str("\n"); */
     }
   }
 
-  Point__destroy(boulder_next);
+  destroy_point(boulder_next);
 }
 
-void Game__handle_input(struct Game * game, int ch) {
+void handle_game_input(struct Game * game, int ch) {
   int x = 0;
   int y = 0;
   if (ch == KEY_LEFT) x--;
@@ -108,7 +85,7 @@ void Game__handle_input(struct Game * game, int ch) {
 
   struct Point * player_next = _next_location(game->player, x, y);
 
-  struct Entity * entity = EntityList__element_at(
+  struct Entity * entity = find_entity_at_point_in_list(
     game->entities, player_next->x, player_next->y
   );
 
@@ -116,13 +93,13 @@ void Game__handle_input(struct Game * game, int ch) {
     struct Point * entity_next = _next_location(entity, x, y);
 
     if (entity->type == BOULDER_TYPE) {
-      _Game__move_entity(game->entities, entity, x, y);
+      _move_entity(game->entities, entity, x, y);
     } else if (entity->type == EXIT_TYPE) {
       exit(0);
     }
-    Point__destroy(entity_next);
+    destroy_point(entity_next);
   }
 
-  _Game__move_player(game, x, y);
-  Point__destroy(player_next);
+  _move_player(game, x, y);
+  destroy_point(player_next);
 }
