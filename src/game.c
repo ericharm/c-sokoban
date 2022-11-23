@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include "game.h"
 #include "entity.h"
+#include "entity_list.h"
 #include "level_reader.h"
 #include "point.h"
 

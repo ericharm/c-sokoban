@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include "level_reader.h"
 #include "entity.h"
+#include "entity_list.h"
 
 struct Entity * load_level_player(char * filename) {
   struct Entity * player = create_entity(PLAYER_TYPE, 0, 0);

@@ -3,12 +3,14 @@ add_library(
   app.h
   colors.h
   entity.h
+  entity_list.h
   game.h
   level_reader.h
   logger.h
   point.h
   app.c
   entity.c
+  entity_list.c
   game.c
   level_reader.c
   logger.c
