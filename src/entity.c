@@ -108,13 +108,11 @@ int entity_list_length(struct Link * list) {
 }
 
 struct Entity * find_entity_at_point_in_list(struct Link * list, int x, int y) {
+  struct Entity * element;
   struct Link * node = list;
-  struct Entity * element = node->element;
-
-  while (element != NULL && node->next != NULL) {
+  while ((element = node->element) != NULL && node->next != NULL) {
     if (element != NULL && element->x == x && element->y == y) return node->element;
     node = node->next;
-    element = node->element;
   }
   return NULL;
 }
