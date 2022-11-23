@@ -4,7 +4,6 @@
 #include "entity.h"
 #include "level_reader.h"
 #include "point.h"
-#include "logger.h"
 
 struct Game * create_game() {
   struct Game * game = malloc(sizeof(struct Game));
@@ -52,23 +51,8 @@ void _move_entity(struct Link * entities, struct Entity * entity, int x, int y) 
     move_entity(entity, boulder_next->x, boulder_next->y);
   } else {
     if (obstacle->type == PIT_TYPE) {
-      // remove pit and boulder
-      //
-      log_str("amount of entities before removing: ");
-      log_int(entity_list_length(entities));
-      log_str("\n");
-
       remove_entity_from_list(entities, obstacle);
-
-      log_str("amount of entities after removing pit: ");
-      log_int(entity_list_length(entities));
-      log_str("\n");
-
       remove_entity_from_list(entities, entity);
-
-      /* log_str("amount of entities after removing boulder: "); */
-      /* log_int(entity_list_length(entities)); */
-      /* log_str("\n"); */
     }
   }
 

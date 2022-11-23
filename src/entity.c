@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include "entity.h"
 #include "colors.h"
-#include "logger.h"
+#include "point.h"
 
 struct Entity * create_entity(enum EntityType type, int x, int y) {
   struct Entity * entity = malloc(sizeof(struct Entity));
@@ -95,36 +95,26 @@ void append_to_entity_list(struct Link * list, struct Entity * entity) {
   } else link->element = entity;
 }
 
-//
 int entity_list_length(struct Link * list) {
-  bool at_end_of_list = false;
-
   struct Link * node = list;
-  int size = 0;
+  if (node->element == NULL) return 0;
+  int size = 1;
 
-  while (node->element != NULL && at_end_of_list != true) {
+  while (node->next != NULL) {
     size++;
-
-    if (node->next != NULL) node = node->next;
-    else at_end_of_list = true;
+    node = node->next;
   }
   return size;
 }
 
-//
 struct Entity * find_entity_at_point_in_list(struct Link * list, int x, int y) {
-  bool at_end_of_list = false;
-
   struct Link * node = list;
-  int size = 0;
+  struct Entity * element = node->element;
 
-  while (node->element != NULL && at_end_of_list != true) {
-    if (node->element->x == x && node->element->y == y) {
-      return node->element;
-    }
-
-    if (node->next != NULL) node = node->next;
-    else at_end_of_list = true;
+  while (element != NULL && node->next != NULL) {
+    if (element != NULL && element->x == x && element->y == y) return node->element;
+    node = node->next;
+    element = node->element;
   }
   return NULL;
 }
