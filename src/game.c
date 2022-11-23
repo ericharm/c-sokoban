@@ -90,6 +90,8 @@ void _Game__move_entity(struct Link * entities, struct Entity * entity, int x, i
   } else {
     if (obstacle->type == PIT_TYPE) {
       // remove pit and boulder
+      EntityList__delete_element(entities, obstacle);
+      EntityList__delete_element(entities, entity);
     }
   }
 
@@ -115,6 +117,8 @@ void Game__handle_input(struct Game * game, int ch) {
 
     if (entity->type == BOULDER_TYPE) {
       _Game__move_entity(game->entities, entity, x, y);
+    } else if (entity->type == EXIT_TYPE) {
+      exit(0);
     }
     Point__destroy(entity_next);
   }

@@ -58,6 +58,8 @@ struct Link * Link__new(struct Entity * entity) {
 
 struct Link * EntityList__new() {
   struct Link * list = malloc(sizeof(struct Link));
+  list->element = NULL;
+  list->next = NULL;
   return list;
 }
 
@@ -125,6 +127,7 @@ struct Entity * EntityList__element_at(struct Link * list, int x, int y) {
   return NULL;
 }
 
+/*
 // TODO: refactor this mess
 void EntityList__delete_link(struct Link * list, struct Link * link_to_remove) {
   // if it's the first node in the list
@@ -159,7 +162,7 @@ void EntityList__delete_link(struct Link * list, struct Link * link_to_remove) {
     }
     else at_end_of_list = true;
   }
-}
+} */
 
 void EntityList__delete_element(
   struct Link * list, struct Entity * entity
@@ -171,14 +174,17 @@ void EntityList__delete_element(
   while (node->element != NULL && at_end_of_list != true) {
 
     if (node->element == entity) {
-      EntityList__delete_link(list, node);
+      /* EntityList__delete_link(list, node); */
+      free(node->element);
+      node->next = node->next->next;
       return;
     }
 
     struct Link * next = node->next;
     if (next != NULL) {
       if (next->element == entity) {
-        EntityList__delete_link(list, next);
+        /* EntityList__delete_link(list, next); */
+        node->next = node->next->next;
         return;
       } else node = node->next;
     }

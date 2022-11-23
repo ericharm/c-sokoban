@@ -7,8 +7,8 @@ void describe_test(char * description) {
   printf("\n");
 }
 
-void test_EntityList__new() {
-  describe_test("test_EntityList__new()");
+void test_create_entity_list() {
+  describe_test("test create entity list");
   struct Link * list = EntityList__new();
 
   assert(EntityList__size(list) == 0);
@@ -16,56 +16,41 @@ void test_EntityList__new() {
   assert(list->next == NULL);
 }
 
-void test_EntityList__push() {
-  describe_test("test_EntityList__push()");
+void test_append_to_entity_list() {
+  describe_test("test append to entity list");
   struct Link * list = EntityList__new();
-  EntityList__push(list, Entity__new('@', 0, 0, 0));
+  EntityList__push(list, Entity__new(PLAYER_TYPE, 0, 0));
 
   assert(EntityList__size(list) == 1);
   assert(list->element->ch == '@');
   assert(list->next == NULL);
 }
 
-void test_EntityList__delete_link() {
-  describe_test("test_EntityList__delete_link()[first of one]");
+void test_delete_element_from_beginning_of_list_with_one_element() {
+  describe_test("test deleting element from beginning of list with one element");
+
+  struct Entity * hero = Entity__new(PLAYER_TYPE, 0, 0);
+
   struct Link * list = EntityList__new();
+
   assert(EntityList__size(list) == 0);
-  struct Entity * entity = Entity__new('@', 0, 0, 0);
-  struct Link * link = Link__new(entity);
-  list = link;
+  assert(list->element == NULL);
+  assert(list->next == NULL);
+
+  EntityList__push(list, hero);
   assert(EntityList__size(list) == 1);
-  EntityList__delete_link(list, link);
+  assert(list->element == hero);
+
+  EntityList__delete_element(list, hero);
   assert(EntityList__size(list) == 0);
+  assert(list->element == NULL);
 }
-
-void test_EntityList__delete_link_first_of_two() {
-  describe_test("test_EntityList__delete_link()[first of two]");
-
-  struct Entity * hero = Entity__new('@', 0, 0, 0);
-  struct Entity * wall = Entity__new('#', 0, 0, 0);
-
-  struct Link * hero_link = Link__new(hero);
-  struct Link * wall_link = Link__new(wall);
-
-  struct Link * list = hero_link;
-
-  assert(EntityList__size(list) == 1);
-
-  list->next = wall_link;
-  assert(EntityList__size(list) == 2);
-
-  EntityList__delete_link(list, hero_link);
-
-  assert(EntityList__size(list) == 1);
-  assert(list->element == wall);
-}
-
 
 void test_delete_element_from_beginning_of_list_with_multiple_elements() {
   describe_test("test deleting element from beginning of list with multiple elements");
 
-  struct Entity * hero = Entity__new('@', 0, 0, 0);
-  struct Entity * wall = Entity__new('#', 0, 0, 0);
+  struct Entity * hero = Entity__new(PLAYER_TYPE, 0, 0);
+  struct Entity * wall = Entity__new(WALL_TYPE, 0, 0);
 
   struct Link * list = EntityList__new();
 
@@ -86,13 +71,11 @@ void test_delete_element_from_beginning_of_list_with_multiple_elements() {
   assert(list->element == wall);
 }
 
-  /* describe_test("test deleting element from beginning of list with one element"); */
+void test_delete_element_from_end_of_list_with_multiple_elements() {
+  describe_test("test deleting element from end of list with multiple elements");
 
-void test_delete_element_from_end_of_list() {
-  describe_test("test deleting element from end of list");
-
-  struct Entity * hero = Entity__new('@', 0, 0, 0);
-  struct Entity * wall = Entity__new('#', 0, 0, 0);
+  struct Entity * hero = Entity__new(PLAYER_TYPE, 0, 0);
+  struct Entity * wall = Entity__new(WALL_TYPE, 0, 0);
 
   struct Link * list = EntityList__new();
 
@@ -113,15 +96,43 @@ void test_delete_element_from_end_of_list() {
   assert(list->element == hero);
 }
 
-  /* describe_test("test deleting element from end of list"); */
-  /* describe_test("test deleting element from middle of list"); */
+void test_delete_element_from_middle_of_list() {
+  describe_test("test deleting element from middle of list");
+
+  struct Entity * hero = Entity__new(PLAYER_TYPE, 0, 0);
+  struct Entity * wall = Entity__new(WALL_TYPE, 0, 0);
+  struct Entity * boulder = Entity__new(BOULDER_TYPE, 0, 0);
+
+  struct Link * list = EntityList__new();
+
+  assert(EntityList__size(list) == 0);
+  assert(list->element == NULL);
+  assert(list->next == NULL);
+
+  EntityList__push(list, hero);
+  assert(EntityList__size(list) == 1);
+  assert(list->element == hero);
+
+  EntityList__push(list, wall);
+  assert(EntityList__size(list) == 2);
+  assert(list->element == hero);
+
+  EntityList__push(list, boulder);
+  assert(EntityList__size(list) == 3);
+  assert(list->element == hero);
+
+  EntityList__delete_element(list, wall);
+  assert(EntityList__size(list) == 2);
+  assert(list->element == hero);
+  assert(list->next->element == boulder);
+}
 
 
 void run_entity_tests() {
-  test_EntityList__new();
-  test_EntityList__push();
-  test_EntityList__delete_link();
-  test_EntityList__delete_link_first_of_two();
+  test_create_entity_list();
+  test_append_to_entity_list();
+  /* test_delete_element_from_beginning_of_list_with_one_element(); */
   test_delete_element_from_beginning_of_list_with_multiple_elements();
-  test_delete_element_from_end_of_list();
+  test_delete_element_from_end_of_list_with_multiple_elements();
+  /* test_delete_element_from_middle_of_list(); */
 }
