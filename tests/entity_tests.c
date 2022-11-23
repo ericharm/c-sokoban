@@ -26,6 +26,23 @@ void test_append_to_entity_list() {
   assert(list->next == NULL);
 }
 
+void test_shift_entity_list() {
+  describe_test("test shift entity list");
+  struct Link * list = EntityList__new();
+  EntityList__push(list, Entity__new(PLAYER_TYPE, 0, 0));
+  EntityList__push(list, Entity__new(WALL_TYPE, 0, 0));
+
+  assert(EntityList__size(list) == 2);
+
+  shift_entity_list(list);
+  assert(EntityList__size(list) == 1);
+  assert(list->element->type == WALL_TYPE);
+
+  shift_entity_list(list);
+  assert(EntityList__size(list) == 0);
+  assert(list->element == NULL);
+}
+
 void test_delete_element_from_beginning_of_list_with_one_element() {
   describe_test("test deleting element from beginning of list with one element");
 
@@ -131,8 +148,9 @@ void test_delete_element_from_middle_of_list() {
 void run_entity_tests() {
   test_create_entity_list();
   test_append_to_entity_list();
-  /* test_delete_element_from_beginning_of_list_with_one_element(); */
+  test_shift_entity_list();
+  test_delete_element_from_beginning_of_list_with_one_element();
   test_delete_element_from_beginning_of_list_with_multiple_elements();
   test_delete_element_from_end_of_list_with_multiple_elements();
-  /* test_delete_element_from_middle_of_list(); */
+  test_delete_element_from_middle_of_list();
 }

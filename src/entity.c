@@ -164,30 +164,27 @@ void EntityList__delete_link(struct Link * list, struct Link * link_to_remove) {
   }
 } */
 
-void EntityList__delete_element(
-  struct Link * list, struct Entity * entity
-) {
-  bool at_end_of_list = false;
 
+void shift_entity_list(struct Link * list) {
+  Entity__destroy(list->element);
+  list->element = NULL;
+  if (list->next != NULL) *list = *list->next;
+}
+
+void EntityList__delete_element(struct Link * list, struct Entity * entity) {
   struct Link * node = list;
+  if (node->element == entity) {
+    shift_entity_list(node);
+    return;
+  }
 
-  while (node->element != NULL && at_end_of_list != true) {
-
-    if (node->element == entity) {
-      /* EntityList__delete_link(list, node); */
-      free(node->element);
-      node->next = node->next->next;
+  while (node->next != NULL) {
+    struct Link * next = node->next;
+    if (next->element == entity) {
+      free(next->element);
+      node->next = next->next;
+      free(next);
       return;
     }
-
-    struct Link * next = node->next;
-    if (next != NULL) {
-      if (next->element == entity) {
-        /* EntityList__delete_link(list, next); */
-        node->next = node->next->next;
-        return;
-      } else node = node->next;
-    }
-    else at_end_of_list = true;
   }
 }

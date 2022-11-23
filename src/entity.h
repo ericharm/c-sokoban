@@ -35,6 +35,7 @@ void EntityList__destroy(struct Link * list);
 void EntityList__push(struct Link * list, struct Entity * entity);
 int EntityList__size(struct Link * list);
 struct Entity * EntityList__element_at(struct Link * list, int x, int y);
+void shift_entity_list(struct Link * list);
 void EntityList__delete_element(struct Link * list, struct Entity * entity);
 
 #endif
