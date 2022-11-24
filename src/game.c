@@ -8,8 +8,9 @@
 
 struct Game * create_game() {
   struct Game * game = malloc(sizeof(struct Game));
-  game->entities = load_level_entities("data/level_1.lvl");
-  game->player = load_level_player("data/level_1.lvl");
+  game->entities = create_entity_list();
+  game->player = create_entity(PLAYER_TYPE, 0, 0);
+  load_level_into_game(game->entities, game->player, "data/level_1.lvl");
   return game;
 }
 
