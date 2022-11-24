@@ -1,7 +1,7 @@
-#import "../src/entity.c"
 #include <assert.h>
+#import "../src/entity.c"
+#import "../src/entity_list.c"
 
-// TODO: move describe to a shared place
 void describe_test(char * description) {
   printf("%s", description);
   printf("\n");
@@ -146,7 +146,6 @@ void test_delete_element_from_middle_of_list() {
   assert(list->element == hero);
   assert(list->next->element == boulder);
 }
-
 
 void run_entity_tests() {
   printf("\nExecuting Tests:\n\n");
