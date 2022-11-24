@@ -15,7 +15,7 @@ struct Entity {
 
 struct Entity * create_entity(enum EntityType type, int x, int y);
 void destroy_entity(struct Entity * entity);
-void draw_entity(struct Entity * entity);
+void draw_entity(struct Entity * entity, struct Point * center);
 void move_entity(struct Entity * entity, int x, int y);
 
 #endif

@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <ncurses.h>
+#include "point.h"
 #include "game.h"
 #include "entity.h"
 #include "entity_list.h"
 #include "level_reader.h"
-#include "point.h"
+#include "centerizer.h"
 
 struct Game * create_game() {
   struct Game * game = malloc(sizeof(struct Game));
@@ -21,8 +22,10 @@ void destroy_game(struct Game * game) {
 }
 
 void draw_game(struct Game * game) {
-  draw_entity(game->player);
-  draw_entity_list(game->entities);
+  struct Point * center = centerize(15, 11);
+  draw_entity(game->player, center);
+  draw_entity_list(game->entities, center);
+  destroy_point(center);
 }
 
 struct Point * _next_location(struct Entity * entity, int x, int y) {

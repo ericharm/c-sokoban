@@ -7,7 +7,7 @@ struct Link {
 };
 
 struct Link * create_entity_list();
-void draw_entity_list(struct Link * list);
+void draw_entity_list(struct Link * list, struct Point * center);
 void destroy_entity_list(struct Link * list);
 void append_to_entity_list(struct Link * list, struct Entity * entity);
 int entity_list_length(struct Link * list);

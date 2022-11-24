@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <ncurses.h>
+#include "point.h"
 #include "entity_list.h"
 #include "entity.h"
 
@@ -28,12 +29,12 @@ void destroy_entity_list(struct Link * list) {
   free(link);
 }
 
-void draw_entity_list(struct Link * list) {
+void draw_entity_list(struct Link * list, struct Point * center) {
   bool at_end_of_list = false;
   struct Link * node = list;
 
   while (node->element != NULL && at_end_of_list != true) {
-    draw_entity(node->element);
+    draw_entity(node->element, center);
     if (node->next != NULL) node = node->next;
     else at_end_of_list = true;
   }

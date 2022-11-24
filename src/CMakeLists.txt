@@ -1,6 +1,7 @@
 add_library(
   src
   app.h
+  centerizer.h
   colors.h
   entity.h
   entity_list.h
@@ -9,6 +10,7 @@ add_library(
   logger.h
   point.h
   app.c
+  centerizer.c
   entity.c
   entity_list.c
   game.c

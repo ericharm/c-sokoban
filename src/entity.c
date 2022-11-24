@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <ncurses.h>
+#include "point.h"
 #include "entity.h"
 #include "colors.h"
 
@@ -38,9 +39,9 @@ void destroy_entity(struct Entity * entity) {
   free(entity);
 }
 
-void draw_entity(struct Entity * entity) {
+void draw_entity(struct Entity * entity, struct Point * center) {
   attron(COLOR_PAIR(entity->color));
-  mvaddch(entity->y, entity->x, entity->ch);
+  mvaddch(entity->y + center->y, entity->x + center->x, entity->ch);
   attroff(COLOR_PAIR(entity->color));
 }
 

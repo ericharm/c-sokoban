@@ -7,7 +7,7 @@
 void load_level_into_game(struct Link * entities, struct Entity * player, char * filename) {
   FILE * file = fopen(filename, "r");
 
-  int x = -1;
+  int x = 0;
   int y = 0;
 
   int ch = fgetc(file);
