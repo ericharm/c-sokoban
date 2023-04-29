@@ -4,6 +4,8 @@
 struct Game {
   struct Entity * player;
   struct Link * entities;
+  int width;
+  int height;
 };
 
 struct Game * create_game();

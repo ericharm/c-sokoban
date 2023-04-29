@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include "point.h"
-#include "entity.h"
 #include "colors.h"
+#include "entity.h"
 
 struct Entity * create_entity(enum EntityType type, int x, int y) {
   struct Entity * entity = malloc(sizeof(struct Entity));

@@ -2,9 +2,12 @@
 #include <ncurses.h>
 #include "entity.h"
 #include "entity_list.h"
+#include "game.h"
 #include "level_reader.h"
 
-void load_level_into_game(struct Link * entities, struct Entity * player, char * filename) {
+struct Game * load_level(char * filename) {
+  struct Game * game = create_game();
+
   FILE * file = fopen(filename, "r");
 
   int x = 0;
@@ -17,28 +20,32 @@ void load_level_into_game(struct Link * entities, struct Entity * player, char *
       case '\n':
         x = -1;
         y++;
+        game->height++;
         break;
       case '@':
-        player->x = x;
-        player->y = y;
+        game->player->x = x;
+        game->player->y = y;
         break;
       case '0':
-        append_to_entity_list(entities, create_entity(BOULDER_TYPE, x, y));
+        append_to_entity_list(game->entities, create_entity(BOULDER_TYPE, x, y));
         break;
       case '#':
-        append_to_entity_list(entities, create_entity(WALL_TYPE, x, y));
+        append_to_entity_list(game->entities, create_entity(WALL_TYPE, x, y));
         break;
       case '^':
-        append_to_entity_list(entities, create_entity(PIT_TYPE, x, y));
+        append_to_entity_list(game->entities, create_entity(PIT_TYPE, x, y));
         break;
       case 'X':
-        append_to_entity_list(entities, create_entity(EXIT_TYPE, x, y));
+        append_to_entity_list(game->entities, create_entity(EXIT_TYPE, x, y));
         break;
     }
     x++;
+    if (x > game->width) game->width = x;
     ch = fgetc(file);
   } while (ch != EOF);
 
   fclose(file);
+
+  return game;
 }
 

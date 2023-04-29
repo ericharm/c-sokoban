@@ -4,7 +4,7 @@
 int main() {
   struct App * app = create_app();
 
-  while (1) {
+  while (true) {
     int input = getch();
     if (input == 'q') {
       destroy_app(app);

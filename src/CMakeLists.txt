@@ -7,6 +7,7 @@ add_library(
   entity_list.h
   game.h
   level_reader.h
+  level_select.h
   logger.h
   point.h
   app.c
@@ -15,6 +16,7 @@ add_library(
   entity_list.c
   game.c
   level_reader.c
+  level_select.c
   logger.c
   point.c
 )

@@ -4,14 +4,14 @@
 #include "game.h"
 #include "entity.h"
 #include "entity_list.h"
-#include "level_reader.h"
 #include "centerizer.h"
 
 struct Game * create_game() {
   struct Game * game = malloc(sizeof(struct Game));
   game->entities = create_entity_list();
   game->player = create_entity(PLAYER_TYPE, 0, 0);
-  load_level_into_game(game->entities, game->player, "data/level_1.lvl");
+  game->width = 0;
+  game->height = 0;
   return game;
 }
 
@@ -22,7 +22,7 @@ void destroy_game(struct Game * game) {
 }
 
 void draw_game(struct Game * game) {
-  struct Point * center = centerize(15, 11);
+  struct Point * center = centerize(game->width, game->height);
   draw_entity(game->player, center);
   draw_entity_list(game->entities, center);
   destroy_point(center);
@@ -36,7 +36,7 @@ struct Point * _next_location(struct Entity * entity, int x, int y) {
 void _move_player(struct Game * game, int x, int y) {
   struct Point * player_next = _next_location(game->player, x, y);
   struct Entity * entity = find_entity_at_point_in_list(
-    game->entities, player_next->x, player_next->y
+      game->entities, player_next->x, player_next->y
   );
 
   if (entity == NULL) move_entity(game->player, player_next->x, player_next->y);
@@ -46,7 +46,7 @@ void _move_player(struct Game * game, int x, int y) {
 void _push_boulder(struct Link * entities, struct Entity * entity, int x, int y) {
   struct Point * boulder_next = _next_location(entity, x, y);
   struct Entity * obstacle = find_entity_at_point_in_list(
-    entities, boulder_next->x, boulder_next->y
+      entities, boulder_next->x, boulder_next->y
   );
 
   if (obstacle == NULL) move_entity(entity, boulder_next->x, boulder_next->y);
@@ -67,7 +67,7 @@ void handle_game_input(struct Game * game, int ch) {
 
   struct Point * player_next = _next_location(game->player, x, y);
   struct Entity * entity = find_entity_at_point_in_list(
-    game->entities, player_next->x, player_next->y
+      game->entities, player_next->x, player_next->y
   );
 
   if (entity) {

@@ -1,6 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "point.h"
+
 enum EntityType {
   BOULDER_TYPE, EXIT_TYPE, PIT_TYPE, PLAYER_TYPE, WALL_TYPE
 };
