@@ -22,6 +22,7 @@ void destroy_game(struct Game * game) {
 }
 
 void draw_game(struct Game * game) {
+  curs_set(0);
   struct Point * center = centerize(game->width, game->height);
   draw_entity(game->player, center);
   draw_entity_list(game->entities, center);

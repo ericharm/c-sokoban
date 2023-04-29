@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include "app.h"
 #include "colors.h"
-/* #include "level_select.h" */
+#include "level_select.h"
 #include "game.h"
 #include "level_reader.h"
 
@@ -20,21 +20,21 @@ void _configure_curses() {
   _configure_colors();
   keypad(stdscr, true);
   noecho();
-  /* curs_set(0); */
 }
 
 struct App * create_app() {
   _configure_curses();
   struct App * app = malloc(sizeof(struct App));
   app->game = load_level("data/level_1.lvl");
-  /* app->level_select = create_level_select(); */
+  app->level_select = create_level_select();
+  app->state = STATE_LEVEL_SELECT;
   draw_app(app);
   return app;
 }
 
 void destroy_app(struct App * app) {
   destroy_game(app->game);
-  /* destroy_level_select(app->level_select); */
+  destroy_level_select(app->level_select);
   free(app);
   clear();
   endwin();
@@ -42,12 +42,29 @@ void destroy_app(struct App * app) {
 
 void draw_app(struct App * app) {
   clear();
-  draw_game(app->game);
-  /* draw_level_select(app->level_select); */
+  switch (app->state) {
+    case STATE_LEVEL_SELECT:
+      draw_level_select(app->level_select);
+      break;
+    case STATE_GAME:
+      draw_game(app->game);
+      break;
+  }
   refresh();
 }
 
 void handle_app_input(struct App * app, int ch) {
-  handle_game_input(app->game, ch);
-  /* handle_level_select_input(app->level_select, ch); */
+  switch (app->state) {
+    case STATE_LEVEL_SELECT:
+      handle_level_select_input(app, app->level_select, ch);
+      break;
+    case STATE_GAME:
+      handle_game_input(app->game, ch);
+      break;
+  }
+}
+
+void set_app_state(struct App * app, enum State state) {
+  app->state = state;
+  draw_app(app);
 }
