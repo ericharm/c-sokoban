@@ -3,12 +3,6 @@
 
 
 struct LevelChoice {
-  // LevelChoice represents a level choice in the level select menu.
-  // It has a label: string to print to the screen when showing the level select menu,
-  // it has an x: int and y: int coordinate to indicate where to print the label on the screen,
-  // it has an index: int to inidicate its order in the sequence of level options,
-  // and it has a filename: string to indicate the file from which to read its data
-  // when the user selects it.
   char * label;
   char * filename;
   int index;

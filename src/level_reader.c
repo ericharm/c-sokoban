@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include "entity.h"
 #include "entity_list.h"
-#include "game.h"
+#include "states/game.h"
 #include "level_reader.h"
 
 struct Game * load_level(char * filename) {

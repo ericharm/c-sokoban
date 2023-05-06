@@ -3,13 +3,15 @@
 
 
 enum State {
+    STATE_MAIN_MENU,
     STATE_LEVEL_SELECT,
     STATE_GAME,
 };
 
 struct App {
-  struct Game * game;
+  struct MainMenu * main_menu;
   struct LevelSelect * level_select;
+  struct Game * game;
   enum State state;
 };
 

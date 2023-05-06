@@ -2,8 +2,9 @@
 #include <ncurses.h>
 #include "app.h"
 #include "colors.h"
-#include "level_select.h"
-#include "game.h"
+#include "states/main_menu.h"
+#include "states/level_select.h"
+#include "states/game.h"
 #include "level_reader.h"
 
 void _configure_colors() {
@@ -25,16 +26,18 @@ void _configure_curses() {
 struct App * create_app() {
   _configure_curses();
   struct App * app = malloc(sizeof(struct App));
-  app->game = load_level("data/level_1.lvl");
+  app->main_menu = create_main_menu();
   app->level_select = create_level_select();
-  app->state = STATE_LEVEL_SELECT;
+  app->game = load_level("data/level_1.lvl");
+  app->state = STATE_MAIN_MENU;
   draw_app(app);
   return app;
 }
 
 void destroy_app(struct App * app) {
-  destroy_game(app->game);
+  destroy_main_menu(app->main_menu);
   destroy_level_select(app->level_select);
+  destroy_game(app->game);
   free(app);
   clear();
   endwin();
@@ -43,6 +46,9 @@ void destroy_app(struct App * app) {
 void draw_app(struct App * app) {
   clear();
   switch (app->state) {
+    case STATE_MAIN_MENU:
+      draw_main_menu(app->main_menu);
+      break;
     case STATE_LEVEL_SELECT:
       draw_level_select(app->level_select);
       break;
@@ -55,6 +61,9 @@ void draw_app(struct App * app) {
 
 void handle_app_input(struct App * app, int ch) {
   switch (app->state) {
+    case STATE_MAIN_MENU:
+      handle_main_menu_input(app, app->main_menu, ch);
+      break;
     case STATE_LEVEL_SELECT:
       handle_level_select_input(app, app->level_select, ch);
       break;

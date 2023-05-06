@@ -5,7 +5,7 @@ project(sokoban)
 
 add_subdirectory(src)
 # add_subdirectory(src/entities)
-# add_subdirectory(src/states)
+add_subdirectory(src/states)
 
 # specify the C++ standard
 # set(CMAKE_CXX_STANDARD 14)
@@ -20,7 +20,7 @@ target_link_libraries(
   ${PROJECT_NAME}
   src
   # entities
-  # states
+  states
   ${CURSES_LIBRARIES}
 )
 

@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <stdio.h>
-#include "app.h"
-#include "centerizer.h"
-#include "level_reader.h"
+#include "../app.h"
+#include "../centerizer.h"
+#include "../level_reader.h"
+#include "../point.h"
 #include "level_select.h"
-#include "point.h"
 
 struct LevelChoice * create_level_choice(
     char * label,

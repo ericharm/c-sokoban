@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <ncurses.h>
-#include "point.h"
+#include "../point.h"
+#include "../entity.h"
+#include "../entity_list.h"
+#include "../centerizer.h"
 #include "game.h"
-#include "entity.h"
-#include "entity_list.h"
-#include "centerizer.h"
 
 struct Game * create_game() {
   struct Game * game = malloc(sizeof(struct Game));
