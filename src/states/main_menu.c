@@ -8,12 +8,14 @@
 
 struct MenuOption * create_menu_option(
     char * label,
+    enum MenuOptionType type,
     int index,
     int x,
     int y
 ) {
   struct MenuOption * menu_option = malloc(sizeof(struct MenuOption));
   menu_option->label = label;
+  menu_option->type = type;
   menu_option->index = index;
   menu_option->x = x;
   menu_option->y = y;
@@ -28,8 +30,8 @@ void destroy_menu_option(struct MenuOption * option) {
 
 struct MainMenu * create_main_menu() {
   struct MainMenu * main_menu = malloc(sizeof(struct MainMenu));
-  main_menu->options[0] = create_menu_option("New Game", 0, 0, 0);
-  main_menu->options[1] = create_menu_option("Quit", 1, 0, 2);
+  main_menu->options[0] = create_menu_option("New Game", MAIN_MENU_OPTION_PLAY, 0, 0, 0);
+  main_menu->options[1] = create_menu_option("Quit", MAIN_MENU_OPTION_QUIT, 1, 0, 2);
   main_menu->selected = 0;
   return main_menu;
 }
@@ -49,6 +51,18 @@ void draw_main_menu(struct MainMenu * main_menu) {
   }
   struct MenuOption * selected = main_menu->options[main_menu->selected];
   move(selected->y + center->y, selected->x + center->x - 2);
+}
+
+void _execute_options(struct App * app, struct MenuOption * selected) {
+  switch (selected->type) {
+    case MAIN_MENU_OPTION_PLAY:
+      set_app_state(app, STATE_LEVEL_SELECT);
+      /* destroy_app(app); */
+      break;
+    case MAIN_MENU_OPTION_QUIT:
+      destroy_app(app);
+      break;
+  }
 }
 
 void handle_main_menu_input(struct App * app, struct MainMenu * main_menu, int ch) {
@@ -77,9 +91,9 @@ void handle_main_menu_input(struct App * app, struct MainMenu * main_menu, int c
         main_menu->selected = 1;
       }
       break;
-
     case '\n':
-      set_app_state(app, STATE_LEVEL_SELECT);
+      _execute_options(app, main_menu->options[main_menu->selected]);
+      break;
   }
 }
 
