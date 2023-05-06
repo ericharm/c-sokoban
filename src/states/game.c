@@ -4,6 +4,7 @@
 #include "../entity.h"
 #include "../entity_list.h"
 #include "../centerizer.h"
+#include "../app.h"
 #include "game.h"
 
 struct Game * create_game() {
@@ -58,7 +59,7 @@ void _push_boulder(struct Link * entities, struct Entity * entity, int x, int y)
   destroy_point(boulder_next);
 }
 
-void handle_game_input(struct Game * game, int ch) {
+void handle_game_input(struct App * app, struct Game * game, int ch) {
   int x = 0;
   int y = 0;
   if (ch == KEY_LEFT) x--;
@@ -73,7 +74,7 @@ void handle_game_input(struct Game * game, int ch) {
 
   if (entity) {
     if (entity->type == BOULDER_TYPE) _push_boulder(game->entities, entity, x, y);
-    else if (entity->type == EXIT_TYPE) exit(0);
+    else if (entity->type == EXIT_TYPE) set_app_state(app, STATE_MAIN_MENU);
   }
 
   _move_player(game, x, y);

@@ -68,7 +68,7 @@ void handle_app_input(struct App * app, int ch) {
       handle_level_select_input(app, app->level_select, ch);
       break;
     case STATE_GAME:
-      handle_game_input(app->game, ch);
+      handle_game_input(app, app->game, ch);
       break;
   }
 }
